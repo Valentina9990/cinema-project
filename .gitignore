@@ -1,2 +1,8 @@
+# Ignorar la carpeta node_modules
 node_modules/
+
+# Ignorar el archivo documentacion.txt
 documentacion.txt
+
+# Ignorar la carpeta .vscode (configuraciones de VSCode)
+.vscode/
