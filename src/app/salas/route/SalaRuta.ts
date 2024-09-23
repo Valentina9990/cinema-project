@@ -7,6 +7,9 @@ class SalaRuta {
     constructor(){
         this.apiRutaSala = Router();
         this.apiRutaSala.get("/getall", salaControlador.dameSalas);
+        this.apiRutaSala.post("/addcito", salaControlador.cogeTuSala);
+        this.apiRutaSala.delete("/delete/:idSala", salaControlador.borraTuSala);
+        this.apiRutaSala.put("/update", salaControlador.actualizaTuSala);
     }
 
 }

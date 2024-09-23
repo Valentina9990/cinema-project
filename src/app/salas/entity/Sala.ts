@@ -3,9 +3,9 @@ class Sala {
     public nombreSala: string;
     public capacidadSala: number;
     public idCine: number;
-    public tipoSala: string;
+    public tipoSala: number;
 
-    constructor(cod:number, nom:string, cap:number, cin:number, tip:string){
+    constructor(cod:number, nom:string, cap:number, cin:number, tip:number){
         this.idSala = cod;
         this.nombreSala = nom;
         this.capacidadSala = cap;
