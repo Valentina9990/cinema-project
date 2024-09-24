@@ -6,10 +6,10 @@ class UsuarioRuta{
 
     constructor(){
         this.apiRutaUsuario = Router();
-        this.apiRutaUsuario.get("/usuarios", usuarioControlador.obtenerUsuarios);
-        this.apiRutaUsuario.post("/usuarios", usuarioControlador.agregarUsuario);
-        this.apiRutaUsuario.delete("/usuarios/:idUsuario", usuarioControlador.eliminarUsuario);
-        this.apiRutaUsuario.put("/usuarios/:idUsuario", usuarioControlador.modificarUsuario);
+        this.apiRutaUsuario.get("/", usuarioControlador.obtenerUsuarios);
+        this.apiRutaUsuario.post("/", usuarioControlador.agregarUsuario);
+        this.apiRutaUsuario.delete("/:idUsuario", usuarioControlador.eliminarUsuario);
+        this.apiRutaUsuario.put("/", usuarioControlador.modificarUsuario);
     }
 }
 

@@ -54,22 +54,20 @@ class UsuarioControlador extends UsuarioDAO {
       const rondasSal = 10;
       contrasenaEncriptada = await bcrypt.hash(req.body.contrasena_usuario, rondasSal);
     }
-  
     const usuarioModificado: Usuario = new Usuario(
-      req.body.id_usuario,
-      req.body.nombre_usuario,
-      req.body.apellido_usuario,
-      contrasenaEncriptada,
-      req.body.email_usuario,
-      new Date(req.body.fecha_creacion),
-      req.body.fecha_nacimiento_usuario,
-      req.body.id_cine,
-      req.body.id_cargo
+      0,"","","","",new Date(),new Date(),0,0
     );
-  
+    usuarioModificado.idUsuario = Number(req.body.id_usuario);
+    usuarioModificado.nombreUsuario = String(req.body.nombre_usuario);
+    usuarioModificado.apellidoUsuario = String(req.body.apellido_usuario);
+    usuarioModificado.contrasenaUsuario = contrasenaEncriptada;
+    usuarioModificado.fechaCreacion = new Date(req.body.fecha_creacion);
+    usuarioModificado.fechaNacimientoUsuario = new Date(req.body.fecha_nacimiento_usuario);
+    usuarioModificado.idCine = Number(req.body.id_cine);
+    usuarioModificado.idCargo = Number(req.body.id_cargo);
+    usuarioModificado.emailUsuario = String(req.body.email_usuario);
     UsuarioDAO.modificarUsuario(usuarioModificado, res);
   }
-  
 }
 
 const usuarioControlador = new UsuarioControlador();

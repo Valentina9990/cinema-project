@@ -102,8 +102,8 @@ class UsuarioDAO{
             break;
         }
       })
-      .catch((miError: any) => {
-        console.log(miError);
+      .catch((error: any) => {
+        console.log(error);
         res.status(400).json({ respuesta: "Error al actualizar el usuario" });
       });
   }
