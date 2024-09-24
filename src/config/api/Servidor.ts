@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import apiSalaRuta from "../../app/salas/route/SalaRuta";
+import apiUsuarioRuta from "../../app/usuarios/route/UsuarioRuta"
 
 class Servidor{
     public app: express.Application;
@@ -14,7 +15,8 @@ class Servidor{
     }
 
     public exponerEndpoint():void {
-        this.app.use("/room", apiSalaRuta)
+        this.app.use("/room", apiSalaRuta);
+        this.app.use("/usuarios", apiUsuarioRuta); 
     }
     
     public cargarConfiguracion():void {
@@ -29,7 +31,6 @@ class Servidor{
 
     public iniciar():void{
         this.app.listen(this.app.get("PORT"),()=> {
-            //console.log("Listo me fui", this.app.get("PORT"));
             console.log(`Servidor iniciado en el puerto ${this.app.get("PORT")}`);
         });
     }
