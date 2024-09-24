@@ -7,6 +7,7 @@ const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const SalaRuta_1 = __importDefault(require("../../app/salas/route/SalaRuta"));
+const PeliculaRuta_1 = __importDefault(require("../../app/peliculas/route/PeliculaRuta"));
 class Servidor {
     constructor() {
         this.app = (0, express_1.default)();
@@ -15,6 +16,7 @@ class Servidor {
     }
     exponerEndpoint() {
         this.app.use("/room", SalaRuta_1.default);
+        this.app.use("/movies", PeliculaRuta_1.default);
     }
     cargarConfiguracion() {
         this.app.set("PORT", 3123);

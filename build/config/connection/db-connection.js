@@ -29,7 +29,7 @@ pool
     myconn.done();
 })
     .catch((miError) => {
-    console.error("Error al conectar a la base de datos:", miError.message);
+    console.error("Error al conectar a la base de datos:", miError);
     //console.log("Mi error");
 });
 exports.default = pool;
