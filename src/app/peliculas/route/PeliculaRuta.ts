@@ -9,6 +9,7 @@ class PeliculaRuta{
     constructor(){
         this.apiRutaPelicula = Router();
         this.apiRutaPelicula.get("/getall", peliculaControlador.damePeliculas);
+        this.apiRutaPelicula.post("/addcito", peliculaControlador.cogeTuPelicula);
     }
 }
 

@@ -21,6 +21,33 @@ class PeliculaDAO{
     }
 
 
+    protected static async grabeloYa(datos: Pelicula, res: Response): Promise<any>{
+        await pool
+        .task(async(consulta)=>{
+            let queHacer = 2;
+            let respuBase :any;
+            respuBase = await consulta.one(SQL_PELICULAS.ADD, [
+                datos.nombrePelicula,
+                datos.idGenero,
+                datos.duracionPelicula,
+                datos.idioma
+            ]);
+            return {queHacer, respuBase};
+        })
+        .then(({queHacer, respuBase})=>{
+            switch(queHacer){
+                case 1:
+                    res.status(400).json({ respuesta: "Ya existe esta pelicula" });
+                    break;
+                default:
+                    res.status(200).json(respuBase);
+                    break;
+            }
+        }).catch((miError:any)=>{
+            console.log(miError);
+            res.status(400).json({respuesta:"No se puede procesar la solicitud"});
+        });
+    }
 
     
 }
