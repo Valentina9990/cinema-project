@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import apiFuncionRuta from "../../app/funciones/route/FuncionRuta";
 import apiSalaRuta from "../../app/salas/route/SalaRuta";
 
 class Servidor{
@@ -15,6 +16,7 @@ class Servidor{
 
     public exponerEndpoint():void {
         this.app.use("/room", apiSalaRuta)
+        this.app.use("/shows", apiFuncionRuta)
     }
     
     public cargarConfiguracion():void {

@@ -9,6 +9,9 @@ class SalaRuta {
     constructor() {
         this.apiRutaSala = (0, express_1.Router)();
         this.apiRutaSala.get("/getall", SalaControlador_1.default.dameSalas);
+        this.apiRutaSala.post("/addcito", SalaControlador_1.default.cogeTuSala);
+        this.apiRutaSala.delete("/delete/:idSala", SalaControlador_1.default.borraTuSala);
+        this.apiRutaSala.put("/update", SalaControlador_1.default.actualizaTuSala);
     }
 }
 const salaRuta = new SalaRuta().apiRutaSala;

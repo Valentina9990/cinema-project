@@ -25,8 +25,91 @@ class SalaDAO {
                 .catch((miError) => {
                 console.log(miError);
                 res.status(400).json({
-                    "respuesta": "Error al obtener los datos"
+                    respuesta: "Error al obtener los datos",
                 });
+            });
+        });
+    }
+    static grabeloYa(datos, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db_connection_1.default
+                .task((consulta) => __awaiter(this, void 0, void 0, function* () {
+                let queHacer = 2;
+                let respuBase;
+                respuBase = yield consulta.one(sala_sql_1.SQL_SALAS.ADD, [
+                    datos.nombreSala,
+                    datos.tipoSala,
+                    datos.capacidadSala,
+                    datos.idCine
+                ]);
+                return { queHacer, respuBase };
+            }))
+                .then(({ queHacer, respuBase }) => {
+                switch (queHacer) {
+                    case 1:
+                        res.status(400).json({ respuesta: "Ya existe la sala" });
+                        break;
+                    default:
+                        res.status(200).json(respuBase);
+                        break;
+                }
+            })
+                .catch((miError) => {
+                console.log(miError);
+                res.status(400).json({ respuesta: "Se totio" });
+            });
+        });
+    }
+    static borreloYa(datos, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            db_connection_1.default
+                .task((consulta) => {
+                return consulta.result(sala_sql_1.SQL_SALAS.DELETE, [datos.idSala]);
+            })
+                .then((respuesta) => {
+                res.status(200).json({
+                    respuesta: "Lo borré sin miedo",
+                    info: respuesta.rowCount,
+                });
+            })
+                .catch((miErrorcito) => {
+                console.log(miErrorcito);
+                res.status(400).json({ respuesta: "Pailas, sql totiado" });
+            });
+        });
+    }
+    static actualiceloYa(datos, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db_connection_1.default
+                .task((consulta) => __awaiter(this, void 0, void 0, function* () {
+                let queHacer = 1;
+                let respuBase;
+                const cubi = yield consulta.one(sala_sql_1.SQL_SALAS.HOW_MANY, [datos.idSala]);
+                if (cubi.existe > 0) {
+                    queHacer = 2;
+                    respuBase = yield consulta.one(sala_sql_1.SQL_SALAS.UPDATE, [
+                        datos.nombreSala,
+                        datos.capacidadSala,
+                        datos.idCine,
+                        datos.tipoSala,
+                        datos.idSala
+                    ]);
+                }
+                return { queHacer, respuBase };
+            }))
+                .then(({ queHacer, respuBase }) => {
+                switch (queHacer) {
+                    case 1:
+                        res.status(400).json({ respuesta: "No se encontro la sala" });
+                        break;
+                    default:
+                        res.status(200).json(respuBase);
+                        break;
+                }
+            })
+                .catch((miError) => {
+                console.log(miError);
+                res.status(400).json({ respuesta: "Se totió mano" });
             });
         });
     }

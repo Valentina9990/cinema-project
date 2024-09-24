@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
+const FuncionRuta_1 = __importDefault(require("../../app/funciones/route/FuncionRuta"));
 const SalaRuta_1 = __importDefault(require("../../app/salas/route/SalaRuta"));
 class Servidor {
     constructor() {
@@ -15,6 +16,7 @@ class Servidor {
     }
     exponerEndpoint() {
         this.app.use("/room", SalaRuta_1.default);
+        this.app.use("/shows", FuncionRuta_1.default);
     }
     cargarConfiguracion() {
         this.app.set("PORT", 3123);
