@@ -6,3 +6,4 @@ documentacion.txt
 
 # Ignorar la carpeta .vscode (configuraciones de VSCode)
 .vscode/
+.env
