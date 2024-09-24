@@ -17,7 +17,7 @@ class Servidor{
 
     public exponerEndpoint():void {
         this.app.use("/room", apiSalaRuta);
-        this.app.use("/usuarios", apiUsuarioRuta); 
+        this.app.use("/users", apiUsuarioRuta); 
         this.app.use("/shows", apiFuncionRuta)
     }
     
