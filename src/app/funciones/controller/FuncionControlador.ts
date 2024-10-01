@@ -8,32 +8,100 @@ class FuncionControlador extends FuncionDAO{
     }
 
     public add(req: Request, res: Response): void {
-        const obj: Funcion = new Funcion(0,0,0,"","");
-        obj.idSala = Number(req.body.id_sala);
-        obj.idPelicula = Number(req.body.id_pelicula);
-        obj.fechaFuncion = req.body.fecha_funcion;
-        obj.horaInicioFuncion = req.body.hora_inicio_funcion;
-        FuncionDAO.add(obj, res);
-    }
+        try {
+            const { id_sala, id_pelicula, fecha_funcion, hora_inicio_funcion } = req.body;
 
-    public delete(req: Request, res: Response): void {
-        if(isNaN(Number(req.params.idFuncion))){
-            res.status(400).json({response: "Falta el id"});
-        }else{
-            const id = Number(req.params.idFuncion);
-            const obj: Funcion = new Funcion(id,0,0,"","");
-            FuncionDAO.delete(obj,res);
+            if (!id_sala || isNaN(Number(id_sala))) {
+                res.status(400).json({ message: "El id de la sala es inválido o está vacío." });
+                return;
+            }
+
+            if (!id_pelicula || isNaN(Number(id_pelicula))) {
+                res.status(400).json({ message: "El id de la película es inválido o está vacío." });
+                return;
+            }
+
+            if (!fecha_funcion) {
+                res.status(400).json({ message: "La fecha de la función es requerida." });
+                return;
+            }
+
+            if (!hora_inicio_funcion) {
+                res.status(400).json({ message: "La hora de inicio de la función es requerida." });
+                return;
+            }
+
+            const obj: Funcion = new Funcion(0, Number(id_sala), Number(id_pelicula), fecha_funcion, hora_inicio_funcion);
+            FuncionDAO.add(obj, res);
+        } catch (error) {
+            res.status(500).json({ message: "Error al agregar la función." });
         }
     }
 
-    public update(req: Request, res: Response): void {
-        const obj: Funcion = new Funcion(0,0,0,"","");
-        obj.idFuncion = Number(req.body.id_funcion);
-        obj.idSala = Number(req.body.id_sala);
-        obj.idPelicula = Number(req.body.id_pelicula);
-        obj.fechaFuncion = req.body.fecha_funcion;
-        obj.horaInicioFuncion = req.body.hora_inicio_funcion;
-        FuncionDAO.update(obj, res);
+    public async delete(req: Request, res: Response): Promise<void> {
+        try {
+            const idFuncion = Number(req.params.idFuncion);
+
+            if (isNaN(idFuncion)) {
+                res.status(400).json({ message: "El ID de la función es inválido o está vacío." });
+                return;
+            }
+
+            const funcionExistente = await FuncionDAO.findById(idFuncion);
+            
+            if (!funcionExistente) {
+                res.status(404).json({ message: "La función que intenta eliminar no existe." });
+                return;
+            }
+
+            const obj: Funcion = new Funcion(idFuncion, 0, 0, "", "");
+            FuncionDAO.delete(obj, res);
+        } catch (error) {
+            res.status(500).json({ message: "Error al eliminar la función." });
+        }
+    }
+
+    public async update(req: Request, res: Response): Promise<void> {
+        try {
+            const { id_funcion, id_sala, id_pelicula, fecha_funcion, hora_inicio_funcion } = req.body;
+
+            if (!id_funcion || isNaN(Number(id_funcion))) {
+                res.status(400).json({ message: "El ID de la función es inválido o está vacío." });
+                return;
+            }
+
+            if (!id_sala || isNaN(Number(id_sala))) {
+                res.status(400).json({ message: "El ID de la sala es inválido o está vacío." });
+                return;
+            }
+
+            if (!id_pelicula || isNaN(Number(id_pelicula))) {
+                res.status(400).json({ message: "El ID de la película es inválido o está vacío." });
+                return;
+            }
+
+            if (!fecha_funcion) {
+                res.status(400).json({ message: "La fecha de la función es requerida." });
+                return;
+            }
+
+            if (!hora_inicio_funcion) {
+                res.status(400).json({ message: "La hora de inicio de la función es requerida." });
+                return;
+            }
+
+            const funcionExistente = await FuncionDAO.findById(Number(id_funcion));
+            
+            if (!funcionExistente) {
+                res.status(404).json({ message: "La función que intenta actualizar no existe." });
+                return;
+            }
+
+            const obj: Funcion = new Funcion(Number(id_funcion), Number(id_sala), Number(id_pelicula), fecha_funcion, hora_inicio_funcion);
+            FuncionDAO.update(obj, res);
+        } catch (error) {
+            res.status(500).json({ message: "Error al actualizar la función." });
+        }
     }
 }
 

@@ -109,6 +109,11 @@ class FuncionDAO {
                 res.status(400).json({ response: "Error al actualizar los datos" });
             });
     }
+
+    protected static async findById(id: number): Promise<Funcion> {
+        const funcion = await pool.oneOrNone(SQL_FUNCIONES.FIND_BY_ID, [id]);
+        return funcion;
+    }
 }
 
 export default FuncionDAO;
