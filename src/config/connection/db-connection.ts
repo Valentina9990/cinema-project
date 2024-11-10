@@ -2,13 +2,15 @@ import dotenv from "dotenv";
 import pgPromise from "pg-promise";
 import { optionsPG } from "./optionsPG";
 
-dotenv.config({ path: "variables.env" });
+dotenv.config({ path: ".env" });
 
 const name = String(process.env.DATABASE_NAME);
-const user = String(process.env.USER);
+const user = String(process.env.DATABASE_USER);
 const port = Number(process.env.PORT);
 const server = String(process.env.SERVER);
 const password = String(process.env.PASSWORD);
+
+console.log(name, user, port, server, password);
 
 const pgp = pgPromise(optionsPG);
 
@@ -24,13 +26,11 @@ const pool = pgp({
 pool
   .connect()
   .then((myconn) => {
-    //console.log("dios", name);
     console.log(`Conectado a la base de datos: ${name}`);
     myconn.done();
   })
   .catch((miError) => {
     console.error("Error al conectar a la base de datos:", miError);
-    //console.log("Mi error");
   });
 
 export default pool;
