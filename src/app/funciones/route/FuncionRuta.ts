@@ -8,8 +8,11 @@ class FuncionRuta {
         this.apiRutaFuncion = Router();
         this.apiRutaFuncion.get("/", funcionControlador.getAll);
         this.apiRutaFuncion.post("/", funcionControlador.add);
+        this.apiRutaFuncion.post("/add-multiple", funcionControlador.addMultiple);
         this.apiRutaFuncion.delete("/:idFuncion", funcionControlador.delete);
         this.apiRutaFuncion.put("/", funcionControlador.update);
+        this.apiRutaFuncion.put("/update-all-rooms", funcionControlador.updateAllRooms);
+        this.apiRutaFuncion.delete("/delete-by-room/:idSala", funcionControlador.deleteByRoom);
     }
 }
 
