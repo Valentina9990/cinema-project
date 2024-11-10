@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import apiFuncionRuta from "../../app/funciones/route/FuncionRuta";
+import apiPeliculaRuta from "../../app/peliculas/route/PeliculaRuta";
 import apiSalaRuta from "../../app/salas/route/SalaRuta";
 import apiUsuarioRuta from "../../app/usuarios/route/UsuarioRuta";
 
@@ -19,6 +20,7 @@ class Servidor{
         this.app.use("/room", apiSalaRuta);
         this.app.use("/users", apiUsuarioRuta); 
         this.app.use("/shows", apiFuncionRuta)
+        this.app.use("/movies", apiPeliculaRuta)
     }
     
     public cargarConfiguracion():void {
