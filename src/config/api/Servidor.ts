@@ -25,6 +25,11 @@ class Servidor{
         this.app.set("PORT",3123);
         this.app.use(cors());
         this.app.use(morgan("dev"));
+        this.app.use(cors({
+                origin:"*",
+                methods:["GET","POST","PUT","DELETE"],
+                allowedHeaders:["Content-Type","Authorization"]
+            }));
         //tamaño maximo archivo
         this.app.use(express.json({limit:"50mb"}));
         //para que soporte la cantidad de caracteres URL
