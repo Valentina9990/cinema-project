@@ -8,3 +8,4 @@ exports.SQL_SALAS = {
     DELETE: "DELETE FROM salas WHERE id_sala = $1",
     UPDATE: "UPDATE salas SET nombre_sala = $1, id_tipo_sala = $2, sala_capacidad = $3, id_cine = $4 WHERE id_sala = $5 RETURNING id_sala",
 };
+
