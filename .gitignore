@@ -8,3 +8,5 @@ documentacion.txt
 .vscode/
 .env
 build/
+
+build/*
