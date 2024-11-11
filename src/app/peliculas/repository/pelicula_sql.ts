@@ -16,6 +16,8 @@ export const SQL_PELICULAS = {
   HOW_MANY_NAME:
     "SELECT COUNT(nombre_pelicula) as existe FROM Peliculas WHERE nombre_pelicula = $1",
 
+  HOW_MANY_GENERO: "SELECT COUNT(*) as existe FROM Generos WHERE id_genero = $1",
+
   DELETE: "DELETE FROM Peliculas WHERE id_pelicula = $1",
 
   UPDATE:
