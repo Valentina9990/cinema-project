@@ -39,4 +39,3 @@ class SalaControlador extends SalaDAO_1.default {
 }
 const salaControlador = new SalaControlador();
 exports.default = salaControlador;
-

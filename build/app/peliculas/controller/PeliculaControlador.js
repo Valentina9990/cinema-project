@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pelicula_1 = __importDefault(require("../entity/Pelicula"));
 const PeliculaDAO_1 = __importDefault(require("../dao/PeliculaDAO"));
+const Pelicula_1 = __importDefault(require("../entity/Pelicula"));
 class PeliculaControlador extends PeliculaDAO_1.default {
     damePeliculas(req, res) {
         PeliculaDAO_1.default.obtenerTodo([], res);
     }
     cogeTuPelicula(req, res) {
-        const objPel = new Pelicula_1.default(0, "", 0, 0, "");
+        const objPel = new Pelicula_1.default(0, "", 0, 0, "", "", "");
         objPel.nombrePelicula = req.body.nombrePelicula;
         objPel.idGenero = req.body.idGenero;
         objPel.duracionPelicula = req.body.duracionPelicula;
@@ -28,12 +28,12 @@ class PeliculaControlador extends PeliculaDAO_1.default {
         }
         else {
             const codigo = Number(req.params.idPelicula);
-            const objCubi = new Pelicula_1.default(codigo, "", 0, 0, "");
+            const objCubi = new Pelicula_1.default(codigo, "", 0, 0, "", "", "");
             PeliculaDAO_1.default.borreloYa(objCubi, res);
         }
     }
     actualizaTuPelicula(req, res) {
-        const objCubi = new Pelicula_1.default(0, "", 0, 0, "");
+        const objCubi = new Pelicula_1.default(0, "", 0, 0, "", "", "");
         objCubi.idPelicula = req.body.idPelicula;
         objCubi.nombrePelicula = req.body.nombrePelicula;
         objCubi.idGenero = req.body.idGenero;
@@ -42,9 +42,12 @@ class PeliculaControlador extends PeliculaDAO_1.default {
         PeliculaDAO_1.default.actualiceloYa(objCubi, res);
     }
     actualizaTodasLasPeliculas(req, res) {
-        const objCubi = new Pelicula_1.default(0, "", 0, 0, "");
+        const objCubi = new Pelicula_1.default(0, "", 0, 0, "", "", "");
         objCubi.idioma = req.body.idioma;
         PeliculaDAO_1.default.actualizaTodo(objCubi, res);
+    }
+    getAllWithShows(req, res) {
+        PeliculaDAO_1.default.obtenerConFuncionesPaginadas(req.query, res);
     }
 }
 const peliculaControlador = new PeliculaControlador();

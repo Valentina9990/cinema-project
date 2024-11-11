@@ -16,4 +16,3 @@ class SalaRuta {
 }
 const salaRuta = new SalaRuta().apiRutaSala;
 exports.default = salaRuta;
-

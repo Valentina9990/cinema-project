@@ -4,7 +4,7 @@ import Funcion from "../entity/Funcion";
 import { SQL_FUNCIONES } from "../repository/funcion_sql";
 
 class FuncionDAO {
-    protected static async getAll(params: any, res: Response) {
+    public static async getAll(params: any, res: Response) {
         await pool
             .result(SQL_FUNCIONES.GET_ALL, params)
             .then((result) => {
@@ -18,7 +18,7 @@ class FuncionDAO {
             });
     }
 
-    protected static async add(data: Funcion, res: Response): Promise<any> {
+    public static async add(data: Funcion, res: Response): Promise<any> {
         await pool
             .task(async (query) => {
                 let whatToDo = 2;
@@ -56,7 +56,7 @@ class FuncionDAO {
             });
     }
 
-    protected static async delete(data: Funcion, res: Response): Promise<any> {
+    public static async delete(data: Funcion, res: Response): Promise<any> {
         pool
             .task((query) => {
                 return query.result(SQL_FUNCIONES.DELETE, [data.idFuncion]);
@@ -73,7 +73,7 @@ class FuncionDAO {
             });
     }
 
-    protected static async update(data: Funcion, res: Response): Promise<any> {
+    public static async update(data: Funcion, res: Response): Promise<any> {
         await pool
             .task(async (query) => {
                 let whatToDo = 1;
@@ -110,9 +110,23 @@ class FuncionDAO {
             });
     }
 
-    protected static async findById(id: number): Promise<Funcion> {
+    public static async findById(id: number): Promise<Funcion> {
         const funcion = await pool.oneOrNone(SQL_FUNCIONES.FIND_BY_ID, [id]);
         return funcion;
+    }
+
+    public static async getAllPaginated(params: any, res: Response) {
+        await pool
+            .result(SQL_FUNCIONES.GET_ALL_PAGINATED, params)
+            .then((result) => {
+                res.status(200).json(result.rows);
+            })
+            .catch((error) => {
+                console.log(error);
+                res.status(400).json({
+                    response: "Error al obtener los datos",
+                });
+            });
     }
 }
 
