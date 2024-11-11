@@ -1,17 +1,17 @@
-class Sala {    
-    public idSala: number;
-    public nombreSala: string;
-    public capacidadSala: number;
-    public idCine: number;
-    public tipoSala: number;
+class Sala {
+  public idSala: number;
+  public nombreSala: string;
+  public capacidad: number;
+  public idCine: number;
+  public idTipoSala : number;
 
-    constructor(cod:number, nom:string, cap:number, cin:number, tip:number){
-        this.idSala = cod;
-        this.nombreSala = nom;
-        this.capacidadSala = cap;
-        this.idCine = cin;
-        this.tipoSala = tip;
-    }
+  constructor(cod: number, nom: string, cap: number, idC:number,idTpSa:number) {
+    this.idSala = cod;
+    this.nombreSala = nom;
+    this.capacidad = cap;
+    this.idCine = idC;
+    this.idTipoSala=idTpSa;
+  }
 }
 
-export default Sala;
+export default Sala; //no olvidar esta linea - es para poder usarlo

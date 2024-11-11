@@ -1,0 +1,42 @@
+ign soft es = analisis-requisitos-diseño-desarrollo-prueba
+requisitos = lo que te pide un cliente 
+hay 3 pruebas en ing de soft:
+prueba de estres
+prueba de humo
+prueba de carga
+las pruebas unitarias se hacen durante el desarrollo
+
+scrum: proceso de desarrollo
+scrum 3 5 3
+
+roles:
+product owner: es el que pone la plata
+scrum master: es la estrella, el que da ordenes, identifica quien se atraso y quien no para identificar si sirve 
+para ser un desarrollador, crea reuniones, planifica
+developers:prueba, transferencia, le corresponde recibir un pedacito del backlog y en una reunion decir pa cuando lo tiene
+
+artifacts:
+cuando el backlog esta listo y aprobado se convierte en un product backlog
+la diferencia entre el backlog y el product backlog es cuando esta aprobado.
+
+hacer un presentacion de 7 min sin diapositivas con un proceso de desarrollo de software (v,big bang)
+
+proceso en cascada: el problema de esto es la falta de comunicacion, ya que no
+se pueden regresar a procesos anteriores (analisis->requisitos->diseño->desarrollo->prueba)
+
+proceso en cascada mejorada:aqui si se puede regresar entre procesos (analisis<->requisitos<->diseño<->desarrollo<->prueba)
+
+
+
+
+clase 24 martes:
+
+-->add : No permita repetidos
+
+-->delete: on update cascade
+           on restrict
+
+
+-->update masivo: 
+
+-->consultar paginado:
