@@ -49,7 +49,18 @@ class PeliculaControlador extends PeliculaDAO {
     }
 
     public getAllWithShows(req: Request, res: Response): void {
-        PeliculaDAO.obtenerConFuncionesPaginadas(req.query, res);
+        const limit = parseInt(req.query.limit as string);
+        const offset = parseInt(req.query.offset as string);
+
+        PeliculaDAO.obtenerConFuncionesPaginadas({ limit, offset }, res);
+    }
+
+    public getById(req: Request, res: Response): void {
+        if (isNaN(Number(req.params.idPelicula))) {
+            res.status(400).json({ respuesta: "¿Y el codigo?" });
+        } else {
+            PeliculaDAO.obtenerPeliculaConFunciones(req.params, res);
+        }
     }
 }
 

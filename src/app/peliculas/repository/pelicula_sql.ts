@@ -6,7 +6,7 @@ export const SQL_PELICULAS = {
     "SELECT id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail FROM Peliculas LIMIT $1 OFFSET $2",
 
   GET_ALL_WITH_SHOWS_PAGINATED:
-    "SELECT peliculas.id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, funciones.fecha_funcion, funciones.hora_inicio_funcion thumbnail FROM peliculas LIMIT $1 OFFSET $2 LEFT JOIN funciones ON Peliculas.id_pelicula = funciones.id_pelicula",
+    "SELECT peliculas.id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, funciones.fecha_funcion, funciones.hora_inicio_funcion, thumbnail FROM peliculas LIMIT $1 OFFSET $2 LEFT JOIN funciones ON Peliculas.id_pelicula = funciones.id_pelicula",
 
   ADD: "INSERT INTO Peliculas(nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail) VALUES($1, $2, $3, $4) RETURNING id_pelicula",
 
@@ -23,4 +23,7 @@ export const SQL_PELICULAS = {
         WHERE id_pelicula = $1 RETURNING id_pelicula",
 
   UPDATE_ALL: "UPDATE Peliculas SET idioma = $1 RETURNING 'Actualizado'",
+
+  GET_BY_ID:
+    "SELECT id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail FROM Peliculas WHERE id_pelicula = $1",
 };

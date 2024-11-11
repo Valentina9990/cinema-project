@@ -10,8 +10,6 @@ const port = Number(process.env.PORT);
 const server = String(process.env.SERVER);
 const password = String(process.env.PASSWORD);
 
-console.log(name, user, port, server, password);
-
 const pgp = pgPromise(optionsPG);
 
 const pool = pgp({

@@ -17,10 +17,10 @@ class Servidor{
     }
 
     public exponerEndpoint():void {
-        this.app.use("/room", apiSalaRuta);
-        this.app.use("/users", apiUsuarioRuta); 
-        this.app.use("/shows", apiFuncionRuta)
-        this.app.use("/movies", apiPeliculaRuta)
+        this.app.use("/api/room", apiSalaRuta);
+        this.app.use("/api/users", apiUsuarioRuta); 
+        this.app.use("/api/shows", apiFuncionRuta)
+        this.app.use("/api/movies", apiPeliculaRuta)
     }
     
     public cargarConfiguracion():void {

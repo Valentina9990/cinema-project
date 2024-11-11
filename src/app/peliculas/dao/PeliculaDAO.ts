@@ -186,17 +186,61 @@ class PeliculaDAO {
         res: Response
     ) {
         const { limit, offset } = params;
-        await pool
-            .result(SQL_PELICULAS.GET_ALL_WITH_SHOWS_PAGINATED, [limit, offset])
-            .then((resultado) => {
-                res.status(200).json(resultado.rows);
-            })
-            .catch((miError) => {
-                console.log(miError);
-                res.status(400).json({
-                    respuesta: "Error al obtener los datos",
-                });
+
+        try {
+            const resultadoPeliculas = await pool.result(
+                SQL_PELICULAS.PAGINACION,
+                [limit, offset]
+            );
+            let movies = resultadoPeliculas.rows;
+
+            const movieIds = movies.map((movie: any) => movie.idPelicula);
+            const resultadoFunciones = await pool.result(
+                `SELECT id_pelicula, fecha_funcion, hora_inicio_funcion FROM Funciones WHERE id_pelicula = ANY($1)`,
+                [movieIds]
+            );
+            let funciones = resultadoFunciones.rows;
+
+            movies = movies.map((movie: any) => {
+                movie.funciones = funciones.filter(
+                    (funcion: any) => funcion.idPelicula === movie.idPelicula
+                );
+                return movie;
             });
+
+            res.status(200).json(movies);
+        } catch (miError) {
+            console.log(miError);
+            res.status(400).json({
+                respuesta: "Error al obtener los datos",
+            });
+        }
+    }
+
+    public static async obtenerPeliculaConFunciones(params: any, res: Response) {
+        const idPelicula = parseInt(params.idPelicula);
+
+        try {
+            const resultadoPelicula = await pool.one(
+                SQL_PELICULAS.GET_BY_ID,
+                [idPelicula]
+            );
+
+            const resultadoFunciones = await pool.result(
+                `SELECT id_funcion, id_pelicula, fecha_funcion, hora_inicio_funcion, s.nombre_sala FROM Funciones INNER JOIN salas s ON Funciones.id_sala = s.id_sala WHERE id_pelicula = $1`,
+                [idPelicula]
+            );
+
+            const pelicula = resultadoPelicula;
+            pelicula.funciones = resultadoFunciones.rows;
+
+            res.status(200).json(pelicula);
+        } catch (miError) {
+            console.log(miError);
+            res.status(400).json({
+                respuesta: "Error al obtener los datos",
+            });
+        }
     }
 }
 
