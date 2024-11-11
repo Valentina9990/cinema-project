@@ -11,7 +11,7 @@ class PeliculaRuta{
         this.apiRutaPelicula.get("/getall", peliculaControlador.damePeliculas);
         this.apiRutaPelicula.get("/paginar", peliculaControlador.paginaPeliculas);
         this.apiRutaPelicula.post("/addcito", peliculaControlador.cogeTuPelicula);
-        this.apiRutaPelicula.delete("/delete/:idPelicula", peliculaControlador.borraTuPelicula);
+        this.apiRutaPelicula.delete("/delete/:idGenero", peliculaControlador.borraTuPelicula);
         this.apiRutaPelicula.put("/update", peliculaControlador.actualizaTuPelicula);
         this.apiRutaPelicula.put("/updateall", peliculaControlador.actualizaTodasLasPeliculas);
     }

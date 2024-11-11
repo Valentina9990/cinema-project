@@ -74,19 +74,42 @@ class PeliculaDAO {
     }
     static borreloYa(datos, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            db_connection_1.default
-                .task((consulta) => {
-                return consulta.result(pelicula_sql_1.SQL_PELICULAS.DELETE, [datos.idPelicula]);
-            })
+            yield db_connection_1.default
+                .task((consulta) => __awaiter(this, void 0, void 0, function* () {
+                const pelicula = yield consulta.oneOrNone(pelicula_sql_1.SQL_PELICULAS.HOW_MANY_GENERO, [datos.idGenero]);
+                if (pelicula) {
+                    return consulta.result(pelicula_sql_1.SQL_PELICULAS.DELETE, [datos.idGenero]);
+                }
+                else {
+                    return null;
+                }
+            }))
                 .then((respuesta) => {
-                res.status(200).json({
-                    respuesta: "Se borró la pelicula exitosamente",
-                    info: respuesta.rowCount,
-                });
+                if (respuesta && respuesta.rowCount > 0) {
+                    res.status(200).json({
+                        respuesta: "Pelicula eliminada correctamente",
+                        info: respuesta.rowCount,
+                    });
+                }
+                else {
+                    res.status(404).json({
+                        respuesta: "No se encontró la pelicula o no pertenece al género especificado",
+                    });
+                }
             })
                 .catch((miErrorcito) => {
-                console.log(miErrorcito);
-                res.status(400).json({ respuesta: "No se puede eliminar la pelicula porque está siendo referenciada en otra tabla" });
+                if (miErrorcito) {
+                    // Error de violación de integridad referencial (ON DELETE RESTRICT)
+                    res.status(400).json({
+                        respuesta: "No se puede eliminar la película porque está relacionada con otra tabla.",
+                    });
+                }
+                else {
+                    res.status(400).json({
+                        respuesta: "Error al intentar eliminar la película",
+                        detalle: miErrorcito.message,
+                    });
+                }
             });
         });
     }
@@ -120,20 +143,20 @@ class PeliculaDAO {
             });
         });
     }
-    //ACTUALIZAR TODOS LOS IDIOMAS DE LOS REGISTROS POR UNO ESPECIFICO
+    //ACTUALIZAR TODOS LOS GENEROS DE LOS REGISTROS POR UNO ESPECIFICO
     static actualizaTodo(datos, res) {
         return __awaiter(this, void 0, void 0, function* () {
             yield db_connection_1.default
                 .task((consulta) => __awaiter(this, void 0, void 0, function* () {
-                const respuBase = yield consulta.any(pelicula_sql_1.SQL_PELICULAS.UPDATE_ALL, [datos.idioma]);
+                const respuBase = yield consulta.any(pelicula_sql_1.SQL_PELICULAS.UPDATE_ALL, [datos.idGenero]);
                 return { respuBase };
             }))
                 .then(({ respuBase }) => {
                 if (respuBase.length > 0) {
-                    res.status(200).json({ respuesta: "Los idiomas de todas las peliculas fueron actualizados" });
+                    res.status(200).json({ respuesta: "Los generos de todas las peliculas fueron actualizados" });
                 }
                 else {
-                    res.status(400).json({ respuesta: "No se lograron actualizar los idiomas de las peliculas" });
+                    res.status(400).json({ respuesta: "No se lograron actualizar los generos de las peliculas" });
                 }
             })
                 .catch((miErrorcito) => {

@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import Pelicula from "../entity/Pelicula";
 import PeliculaDAO from "../dao/PeliculaDAO"
-import SalaDAO from "../../salas/dao/SalaDAO";
 
 class PeliculaControlador extends PeliculaDAO{
 
@@ -19,19 +18,19 @@ class PeliculaControlador extends PeliculaDAO{
     }
 
     public paginaPeliculas(req:Request, res:Response):void{
-        const limit = parseInt(req.query.limit as string);  // Default limit to 10
-        const offset = parseInt(req.query.offset as string);  // Default offset to 0
+        const limit = parseInt(req.query.limit as string);
+        const offset = parseInt(req.query.offset as string); 
         PeliculaDAO.ObtenerConPaginacion({ limit, offset }, res);   
     }
 
     
 
     public borraTuPelicula(req: Request, res:Response):void{
-        if(isNaN(Number(req.params.idPelicula))){
+        if(isNaN(Number(req.params.idGenero))){
             res.status(400).json({respuesta:"¿Y el codigo?"});
         }else{
-            const codigo = Number(req.params.idPelicula);
-            const objCubi: Pelicula= new Pelicula(codigo, "",0,0,"");
+            const codigo = Number(req.params.idGenero);
+            const objCubi: Pelicula= new Pelicula(0, "",codigo,0,"");
             PeliculaDAO.borreloYa(objCubi, res);
         }
     }
@@ -50,7 +49,7 @@ class PeliculaControlador extends PeliculaDAO{
 
     public actualizaTodasLasPeliculas(req: Request, res: Response):void{
         const objCubi: Pelicula = new Pelicula(0, "", 0, 0, "");
-        objCubi.idioma = req.body.idioma;
+        objCubi.idGenero = req.body.idGenero;
         PeliculaDAO.actualizaTodo(objCubi, res);
     }
 }
@@ -58,3 +57,4 @@ class PeliculaControlador extends PeliculaDAO{
 
 const peliculaControlador = new PeliculaControlador();
 export default peliculaControlador;
+

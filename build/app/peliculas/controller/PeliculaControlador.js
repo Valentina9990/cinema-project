@@ -18,17 +18,17 @@ class PeliculaControlador extends PeliculaDAO_1.default {
         PeliculaDAO_1.default.grabeloYa(objPel, res);
     }
     paginaPeliculas(req, res) {
-        const limit = parseInt(req.query.limit); // Default limit to 10
-        const offset = parseInt(req.query.offset); // Default offset to 0
+        const limit = parseInt(req.query.limit);
+        const offset = parseInt(req.query.offset);
         PeliculaDAO_1.default.ObtenerConPaginacion({ limit, offset }, res);
     }
     borraTuPelicula(req, res) {
-        if (isNaN(Number(req.params.idPelicula))) {
+        if (isNaN(Number(req.params.idGenero))) {
             res.status(400).json({ respuesta: "¿Y el codigo?" });
         }
         else {
-            const codigo = Number(req.params.idPelicula);
-            const objCubi = new Pelicula_1.default(codigo, "", 0, 0, "");
+            const codigo = Number(req.params.idGenero);
+            const objCubi = new Pelicula_1.default(0, "", codigo, 0, "");
             PeliculaDAO_1.default.borreloYa(objCubi, res);
         }
     }
@@ -43,7 +43,7 @@ class PeliculaControlador extends PeliculaDAO_1.default {
     }
     actualizaTodasLasPeliculas(req, res) {
         const objCubi = new Pelicula_1.default(0, "", 0, 0, "");
-        objCubi.idioma = req.body.idioma;
+        objCubi.idGenero = req.body.idGenero;
         PeliculaDAO_1.default.actualizaTodo(objCubi, res);
     }
 }
