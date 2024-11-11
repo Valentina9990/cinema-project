@@ -77,25 +77,43 @@ class PeliculaDAO {
             });
     }
 
-    protected static async borreloYa(
-        datos: Pelicula,
-        res: Response
-    ): Promise<any> {
-        pool.task((consulta) => {
-            return consulta.result(SQL_PELICULAS.DELETE, [datos.idPelicula]);
-        })
+    
+
+    protected static async borreloYa(datos: Pelicula, res: Response): Promise<any> {
+        await pool
+            .task(async (consulta) => {
+                const pelicula = await consulta.oneOrNone(SQL_PELICULAS.HOW_MANY_GENERO, [datos.idGenero]);
+    
+                if (pelicula) {
+                    return consulta.result(SQL_PELICULAS.DELETE, [datos.idGenero]);
+                } else {
+                    return null;
+                }
+            })
             .then((respuesta) => {
-                res.status(200).json({
-                    respuesta: "Se borró la pelicula exitosamente",
-                    info: respuesta.rowCount,
-                });
+                if (respuesta && respuesta.rowCount > 0) {
+                    res.status(200).json({
+                        respuesta: "Pelicula eliminada correctamente",
+                        info: respuesta.rowCount,
+                    });
+                } else {
+                    res.status(404).json({
+                        respuesta: "No se encontró la pelicula o no pertenece al género especificado",
+                    });
+                }
             })
             .catch((miErrorcito) => {
-                console.log(miErrorcito);
-                res.status(400).json({
-                    respuesta:
-                        "No se puede eliminar la pelicula porque está siendo referenciada en otra tabla",
-                });
+                if (miErrorcito) {
+                    // Error de violación de integridad referencial (ON DELETE RESTRICT)
+                    res.status(400).json({
+                        respuesta: "No se puede eliminar la película porque está relacionada con otra tabla.",
+                    });
+                } else {
+                    res.status(400).json({
+                        respuesta: "Error al intentar eliminar la película",
+                        detalle: miErrorcito.message,
+                    });
+                }
             });
     }
 
