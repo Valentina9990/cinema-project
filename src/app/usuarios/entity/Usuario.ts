@@ -1,5 +1,5 @@
 class Usuario {
-    public idUsuario: number;
+    public idUsuario: number | null;
     public nombreUsuario: string;
     public apellidoUsuario: string;
     public contrasenaUsuario: string;
@@ -9,7 +9,7 @@ class Usuario {
     public idCine: number;
     public idCargo: number;
 
-    constructor(cod: number, nom: string, ape: string, con: string, ema: string, fcr: Date, fna: Date, cin: number, car: number) {
+    constructor(cod: number | null, nom: string, ape: string, con: string, ema: string, fcr: Date, fna: Date, cin: number, car: number) {
         this.idUsuario = cod;
         this.nombreUsuario = nom;
         this.apellidoUsuario = ape;
