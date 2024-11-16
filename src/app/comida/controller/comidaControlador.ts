@@ -1,57 +1,63 @@
 import { Response, Request } from "express";
-import comida from "../entity/comida";
-import comidaDao from "../dao/comidaDao";
+import Comida from "../entity/comida";
+import ComidaDAO from "../dao/comidaDao";
 
 
-class ComidaControlador extends comidaDao{
+class ComidaControlador extends ComidaDAO{
+    public obtenerComidas(req: Request, res: Response){
+        const limit = Number(req.query.limit) || 100
+        const page = Number(req.query.page) || 1
+        ComidaDAO.obtenerTodo([limit, (page - 1) * limit], res);
+    }       
 
-    public dameComida(req:Request, res:Response){
-        comidaDao.obtenerTodo([],res);
+    public crearComida(req: Request, res: Response){
+        const objComida: Comida = new Comida(0,"",0);
+        objComida.nombreComida = req.body.nombreComida;
+        objComida.precioComida = req.body.precioComida;
+        ComidaDAO.saveOne(objComida,res);
     }
-
-    public cogeTuComida(req:Request, res:Response): void{
-        const objCubi : comida = new comida(0,"");
-        objCubi.idComida= req.body.idComida;
-        objCubi.nombreComida = req.body.nombreComida;
-        comidaDao.grabeloYa(objCubi,res);
-    }
-
-    public borrarTuComida(req: Request, res: Response): void {
-        // Validar si el parámetro idComida es un número
-        if (isNaN(Number(req.params.idComida))) {
-            res.status(400).json({ respuesta: "y el código mi vale?" });
-        } else {
-            // Obtener el idComida del request params
-            const codiguito = Number(req.params.idComida);
-    
-            // Crear un objeto comida con el idComida correcto
-            const objCubi: comida = new comida(codiguito, ""); // El nombre se puede dejar vacío, solo interesa el ID
-    
-            // Llamar al método para eliminar la comida
-            comidaDao.borreloYa(objCubi, res);
+    public eliminarComida(req: Request, res: Response){
+        if(isNaN(Number(req.params.idComida))){
+            res.status(400).json({respouesta: "Codigo de entrada invalido"});
+        }
+        else{
+            const num = Number(req.params.idComida);
+            const objComida: Comida = new Comida(num,"",0);
+            ComidaDAO.eliminarUno(objComida, res);
         }
     }
-    public actualizaTuComida(req: Request, res: Response) {
-        const nuevoNombre = req.body.nombre_comida;
-    
-        if (!nuevoNombre) {
-            return res.status(400).json({ error: "El nombre de la comida no puede ser nulo o vacío" });
+    public actualizarComida(req: Request, res: Response){
+        if(isNaN(Number(req.body.idComida))){
+            res.status(400).json({respouesta: "Codigo de entrada invalido"});
         }
-    
-        comidaDao.actualizaloYa(nuevoNombre, res);
+        else{
+            const num = Number(req.body.idComida);
+            const objComida: Comida = new Comida(num,req.body.nombreComida,req.body.precioComida);
+            ComidaDAO.actualizarUno(objComida, res)
+        }   
     }
-    
-    
-    public obtenerComidasPaginadas(req: Request, res: Response): void {
-        const limit = Number(req.query.limit) || 10;  // canditad de filas a mostras
-        const offset = Number(req.query.offset) || 0; // desde que fila empezar
-    
-        comidaDao.obtenerComidasPaginadas(limit, offset, res);
+    public actualizarMuchasComidas(req: Request, res: Response){
+        const objComida: Comida = new Comida(0,req.body.nombreComida,req.body.precioComida);
+        ComidaDAO.actualizarMuchos(objComida, res);
     }
-    
 
-
-
+    public obtenerComidaPorId(req:Request, res:Response){
+        if(isNaN(Number(req.params.idComida))){
+            res.status(400).json({respouesta: "Codigo de entrada invalido"});
+        }
+        else{
+            const num = Number(req.params.idComida);
+            const objComida: Comida = new Comida(num,"",0);
+            ComidaDAO.getOneById(objComida, res);
+        }
+    }
+    public obtenerComidasPorNombre(req: Request, res: Response){
+        const limit = Number(req.query.limit) || 10
+        const page = Number(req.query.page) || 1
+        const nombre = req.query.nombre_comida || ""
+        ComidaDAO.obtenerMuchosPorNombre([limit, (page - 1) * limit, nombre], res);
+    } 
 }
-const comidaControlador = new ComidaControlador ();
+
+const comidaControlador = new ComidaControlador();
 export default comidaControlador;

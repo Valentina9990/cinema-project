@@ -2,136 +2,106 @@ import { Response } from "express";
 import pool from "../../../config/connection/dbConnection";
 import comida from "../entity/comida";
 import { SQL_COMIDAS } from "../repository/comida_sql";
+import Comida from "../entity/comida";
 
-class comidaDao{
-    protected static async obtenerTodo(params: any, res: Response){
-        await pool
-            .result(SQL_COMIDAS.GET_ALL,params)
-            .then((resultado)=>{
-            res.status(200).json(resultado.rows);
-            })
-            .catch((miError)=>{
-            console.log(miError);
-            res.status(400).json({
-                respuesta: "Error al obtener los datos",
-            });
-        });
-    }
-
-    protected static async grabeloYa(datos: comida, res: Response): Promise<any> {
-        await pool
-          .task(async (consulta) => {
-            let queHacer = 1;
-            let respuBase: any;
-      
-            // Verificar si el idComida ya existe
-            const cubiId = await consulta.one(SQL_COMIDAS.HOW_MANY, [datos.idComida]);
-            if (cubiId.existe == 0) {
-              // Verificar si el nombre de la comida ya existe
-              const cubiNombre = await consulta.one(SQL_COMIDAS.CHECK_NAME, [datos.nombreComida]);
-              if (cubiNombre.existe == 0) {
-                queHacer = 2;
-                respuBase = await consulta.one(SQL_COMIDAS.ADD, [datos.idComida, datos.nombreComida]);
-              } else {
-                // Si el nombre de la comida ya existe
-                queHacer = 3; 
-              }
-            }
-            return { queHacer, respuBase };
-          })
-          .then(({ queHacer, respuBase }) => {
-            switch (queHacer) {
-              case 1:
-                res.status(400).json({ respuesta: "Compita ya existe la comida con ese ID" });
-                break;
-              case 3:
-                res.status(400).json({ respuesta: "Compita ya existe una comida con ese nombre" });
-                break;
-              default:
-                res.status(200).json(respuBase);
-                break;
-            }
-          })
-          .catch((miError: any) => {
-            console.log(miError);
-            res.status(400).json({ respuesta: "se totió mano" });
-          });
-    }
-
-    protected static async borreloYa(datos: comida, res: Response): Promise<any> {
-        await pool
-            .task(async (consulta) => {
-                const existe = await consulta.one(SQL_COMIDAS.EXITS_IN_MENU,[datos.idComida])
-                if(existe != 0){
-                  throw new Error("Error al eliminar esta referenciado en la tabla menu")
-                }
-                return await consulta.result(SQL_COMIDAS.DELETE, [datos.idComida]);
-            })
-            .then((respuesta) => {
-                if (respuesta.rowCount > 0) {
-                    res.status(200).json({
-                        respuesta: "Comida eliminada correctamente",
-                        info: respuesta.rowCount,
-                    });
-                } else {
-                    res.status(404).json({
-                        respuesta: "No se encontró la comida",
-                    });
-                }
-            })
-            .catch((miErrorcito) => {
-                console.log(miErrorcito);
-                if (miErrorcito.code === '23503') {
-                    // Error de violación de integridad referencial (ON DELETE RESTRICT)
-                    res.status(400).json({
-                        respuesta: "No se puede eliminar la comida porque está relacionada con un menú de cine.",
-                    });
-                } else {
-                    res.status(400).json({
-                        respuesta: "Error al intentar eliminar la comida",
-                        detalle: miErrorcito.message,
-                    });
-                }
-            });
+class ComidaDAO {
+  protected static async obtenerTodo(params: any, res: Response){
+      await pool.result( SQL_COMIDAS.GET_ALL,params)
+      .then((response)=>{ 
+          res.status(200).json(response.rows);
+      })
+      .catch((error)=>{
+          res.status(400).json({respuesta: "Error al obtener información de las comidas"})
+      })
   }
 
-
-  protected static async actualizaloYa(nuevoNombre: string, res: Response): Promise<any> {
-    if (!nuevoNombre) {
-        return res.status(400).json({ error: "El nombre de la comida no puede ser nulo o vacío" });
-    }
-
-    pool
-        .task(async (consulta) => {
-            await consulta.none(SQL_COMIDAS.UPDATE_MASIVO, [nuevoNombre]);
-        })
-        .then(() => {
-            res.status(200).json({ respuesta: "Nombres actualizados exitosamente" });
-        })
-        .catch((miErrorcito: any) => {
-            console.log(miErrorcito);
-            res.status(400).json({ respuesta: "Se totió mano" });
-        });
-}
-
-
-
-  
-  protected static async obtenerComidasPaginadas(limit: number, offset: number, res: Response): Promise<any> {
-    await pool
-        .any("SELECT * FROM comidas ORDER BY nombre_comida LIMIT $1 OFFSET $2", [limit, offset])
-        .then((comidas) => {
-            res.status(200).json(comidas);
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).json({ error: "Error al consultar comidas paginadas" });
-        });
-
-
+  protected static async saveOne(params : comida, res: Response): Promise<any>{
+      await pool.task (async (response)=>{
+          const existe = await response.one(SQL_COMIDAS.HOW_MANY_BY_NAME, [params.nombreComida])
+          if(existe.existe >= 1){
+              throw new Error("Ya existe una comida con el mismo nombre")
+          }
+          return await response.one(SQL_COMIDAS.ADD , [params.nombreComida, params.precioComida]);
+      })
+      .then((response)=>{
+          res.status(200).json(response);
+      })
+      .catch((error)=>{
+          console.log(error);
+          res.status(400).json({respuestaa: `Error al crear comida : ${error.message}`})  
+      })
   }
 
+  protected static async eliminarUno(params: Comida, res:Response): Promise<any>{
+      await pool.task(async (response)=>{
+          const existe = await response.one(SQL_COMIDAS.EXISTS_ON_MENU, [params.idComida])
+          if(existe.existe >= 1){
+              throw new Error("La comida esta referenciada en algun menu")
+          }
+          return response.result(SQL_COMIDAS.DELETE, [params.idComida]);
+      })
+      .then((response)=>{
+          res.status(200).json({respuesta: "La comida se elemino con éxito",
+          info: response.rowCount})
+      })
+      .catch((error)=>{
+          console.error(error);
+          res.status(400).json({respuesta: `Error al eliminar comida : ${error.message}`})
+      })
+  }
 
+  protected static async actualizarUno(params: Comida, res : Response ): Promise<any>{
+      await pool.task(async (response)=>{
+          const existe = await response.one(SQL_COMIDAS.HOW_MANY, [params.idComida]);
+          if(existe.existe == 1){
+              return await response.none(SQL_COMIDAS.UPDATE,[params.idComida,params.nombreComida,params.precioComida]);
+          }
+          else{
+              throw new Error("La comida con el codigo suministrado no existe")
+          }
+      })
+      .then((response)=>{
+          res.status(200).json({actulizado: "ok"})
+      })
+      .catch((error)=>{
+          console.error(error);
+          res.status(400).json({respuesta : `Error al actuaizar comida : ${error.message}`})
+      })
+  }
+
+  protected static async actualizarMuchos(params: Comida, res: Response): Promise<any>{
+      console.log("Entramos si señor")
+      await pool.task(async (response) => {
+          return await response.none(SQL_COMIDAS.UPDATE_MANY, ["%"+params.nombreComida+"%",params.precioComida]);
+      })
+      .then((response)=>{ 
+          res.status(200).json({actualizado: "ok"})
+      })
+      .catch((error)=>{
+          console.error(error);
+          res.status(400).json({respuesta: "Error al actualizar varias comidas"})
+      })
+  }
+
+  protected static async getOneById(params:any, res:Response){
+      await pool.one(SQL_COMIDAS.GET_ONE_BY_ID,[params.idComida])
+      .then((response)=>{ 
+          res.status(200).json(response);
+          console.log(response)
+      })
+      .catch((error)=>{
+          res.status(400).json({respuesta: "Error al obtener información de las comida"})
+      })
+  }
+  protected static async obtenerMuchosPorNombre(params: any, res: Response){
+      await pool.result( SQL_COMIDAS.GET_MANY_BY_NAME,params)
+      .then((response)=>{ 
+          res.status(200).json(response.rows);
+      })
+      .catch((error)=>{
+          res.status(400).json({respuesta: "Error al obtener información de las comidas"})
+      })
+  }
 }
 
-export default comidaDao;
+export default ComidaDAO;
