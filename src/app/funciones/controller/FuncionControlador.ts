@@ -19,6 +19,7 @@ class FuncionControlador extends FuncionDAO {
     }
 
     public add(req: Request, res: Response): void {
+        console.log(req.body);
         try {
             const { id_sala, id_pelicula, fecha_funcion, hora_inicio_funcion } =
                 req.body;

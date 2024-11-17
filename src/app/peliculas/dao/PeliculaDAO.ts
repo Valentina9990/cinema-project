@@ -245,7 +245,7 @@ class PeliculaDAO {
             );
 
             const resultadoFunciones = await pool.result(
-                `SELECT id_funcion, id_pelicula, fecha_funcion, hora_inicio_funcion, s.nombre_sala FROM Funciones INNER JOIN salas s ON Funciones.id_sala = s.id_sala WHERE id_pelicula = $1`,
+                `SELECT id_funcion, id_pelicula, fecha_funcion, hora_inicio_funcion, s.id_sala, s.nombre_sala FROM Funciones INNER JOIN salas s ON Funciones.id_sala = s.id_sala WHERE id_pelicula = $1`,
                 [idPelicula]
             );
 
