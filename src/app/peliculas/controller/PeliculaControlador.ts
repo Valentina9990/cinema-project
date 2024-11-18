@@ -55,7 +55,7 @@ class PeliculaControlador extends PeliculaDAO {
     }
 
     public getAllWithShows(req: Request, res: Response): void {
-        const limit = parseInt(req.query.limit as string);
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : 1000;
         const offset = parseInt(req.query.offset as string);
 
         PeliculaDAO.obtenerConFuncionesPaginadas({ limit, offset }, res);
