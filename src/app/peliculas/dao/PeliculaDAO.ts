@@ -18,6 +18,21 @@ class PeliculaDAO {
             });
     }
 
+    protected static async obtenerPorNombre(params: any, res: Response) {
+        await pool
+            .result(SQL_PELICULAS.HOW_MANY_NAME, params).then((resultado) => {
+                res.status(200).json(resultado.rows);
+            }).catch((miError) => {
+                console.log(miError);
+                res.status(400).json({
+                    respuesta: "Error al obtener la pelicula",
+                });
+            });
+    }
+
+
+
+
     protected static async ObtenerConPaginacion(params: any, res: Response) {
         const { limit, offset } = params;
         await pool

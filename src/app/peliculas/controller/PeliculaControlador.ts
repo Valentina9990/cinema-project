@@ -7,6 +7,12 @@ class PeliculaControlador extends PeliculaDAO {
         PeliculaDAO.obtenerTodo([], res);
     }
 
+    public buscarPelicula(req: Request, res: Response): void {
+        const objPel: Pelicula = new Pelicula(0, "", 0, 0, "", "", "");
+        objPel.nombrePelicula = req.body.nombrePelicula;
+        PeliculaDAO.obtenerPorNombre(objPel, res);
+    }
+
     public cogeTuPelicula(req: Request, res: Response): void {
         const objPel: Pelicula = new Pelicula(0, "", 0, 0, "", "", "");
         objPel.nombrePelicula = req.body.nombrePelicula;

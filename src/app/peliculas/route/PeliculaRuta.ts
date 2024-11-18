@@ -8,11 +8,13 @@ class PeliculaRuta{
 
     constructor(){
         this.apiRutaPelicula = Router();
+        this.apiRutaPelicula.get("/getall", peliculaControlador.damePeliculas);
+        this.apiRutaPelicula.get("/get/:nombrePelicula", peliculaControlador.buscarPelicula);
         this.apiRutaPelicula.get("/", peliculaControlador.getAllWithShows);
-        this.apiRutaPelicula.get("/:idPelicula", peliculaControlador.getById);
-        this.apiRutaPelicula.post("/", peliculaControlador.cogeTuPelicula);
-        this.apiRutaPelicula.delete("/:idPelicula", peliculaControlador.borraTuPelicula);
-        this.apiRutaPelicula.put("/", peliculaControlador.actualizaTuPelicula);
+        this.apiRutaPelicula.get("/get/:idPelicula", peliculaControlador.getById);
+        this.apiRutaPelicula.post("/add", peliculaControlador.cogeTuPelicula);
+        this.apiRutaPelicula.delete("/delete/:idPelicula", peliculaControlador.borraTuPelicula);
+        this.apiRutaPelicula.put("/update", peliculaControlador.actualizaTuPelicula);
         this.apiRutaPelicula.put("/updateall", peliculaControlador.actualizaTodasLasPeliculas);
     }
 }

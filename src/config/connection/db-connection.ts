@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import pgPromise from "pg-promise";
 import { optionsPG } from "./optionsPG";
 
-dotenv.config({ path: ".env" });
+dotenv.config({ path: "variables.env" });
 
 const name = String(process.env.DATABASE_NAME);
 const user = String(process.env.DATABASE_USER);
