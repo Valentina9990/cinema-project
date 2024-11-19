@@ -8,9 +8,12 @@ class PeliculaControlador extends PeliculaDAO {
     }
 
     public buscarPelicula(req: Request, res: Response): void {
-        const objPel: Pelicula = new Pelicula(0, "", 0, 0, "", "", "");
-        objPel.nombrePelicula = req.body.nombrePelicula;
-        PeliculaDAO.obtenerPorNombre(objPel, res);
+        if (req.params.nombrePelicula) {
+            const nombre = req.params.nombrePelicula;
+            PeliculaDAO.obtenerPorNombre(nombre, res);
+        }else{
+            res.status(400).json({ respuesta: "¿Y el nombre de la pelicula?" });
+        }
     }
 
     public cogeTuPelicula(req: Request, res: Response): void {
@@ -19,6 +22,8 @@ class PeliculaControlador extends PeliculaDAO {
         objPel.idGenero = req.body.idGenero;
         objPel.duracionPelicula = req.body.duracionPelicula;
         objPel.idioma = req.body.idioma;
+        objPel.sinopsisPelicula = req.body.sinopsisPelicula;
+        objPel.thumbnail = req.body.thumbnail;
         PeliculaDAO.grabeloYa(objPel, res);
     }
 
@@ -29,7 +34,7 @@ class PeliculaControlador extends PeliculaDAO {
     }
 
     public borraTuPelicula(req: Request, res: Response): void {
-        if (isNaN(Number(req.params.idGenero))) {
+        if (isNaN(Number(req.params.idPelicula))) {
             res.status(400).json({ respuesta: "¿Y el codigo?" });
         } else {
             const codigo = Number(req.params.idPelicula);

@@ -67,6 +67,8 @@ class PeliculaDAO {
                         datos.idGenero,
                         datos.duracionPelicula,
                         datos.idioma,
+                        datos.sinopsisPelicula,
+                        datos.thumbnail,
                     ]);
                 }
                 return { queHacer, respuBase };
@@ -97,10 +99,9 @@ class PeliculaDAO {
     protected static async borreloYa(datos: Pelicula, res: Response): Promise<any> {
         await pool
             .task(async (consulta) => {
-                const pelicula = await consulta.oneOrNone(SQL_PELICULAS.HOW_MANY_GENERO, [datos.idGenero]);
-    
+                const pelicula = await consulta.oneOrNone(SQL_PELICULAS.HOW_MANY, [datos.idPelicula]);
                 if (pelicula) {
-                    return consulta.result(SQL_PELICULAS.DELETE, [datos.idGenero]);
+                    return consulta.result(SQL_PELICULAS.DELETE, [datos.idPelicula]);
                 } else {
                     return null;
                 }

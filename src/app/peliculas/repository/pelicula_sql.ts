@@ -8,7 +8,7 @@ export const SQL_PELICULAS = {
   GET_ALL_WITH_SHOWS_PAGINATED:
     "SELECT peliculas.id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, funciones.fecha_funcion, funciones.hora_inicio_funcion, thumbnail FROM peliculas LIMIT $1 OFFSET $2 LEFT JOIN funciones ON Peliculas.id_pelicula = funciones.id_pelicula",
 
-  ADD: "INSERT INTO Peliculas(nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail) VALUES($1, $2, $3, $4) RETURNING id_pelicula",
+  ADD: "INSERT INTO Peliculas(nombre_pelicula, id_genero, duracion_pelicula, idioma, sinopsis_pelicula, thumbnail) VALUES($1, $2, $3, $4, $5, $6) RETURNING id_pelicula",
 
   HOW_MANY:
     "SELECT COUNT(id_pelicula) as existe FROM Peliculas WHERE id_pelicula = $1",
