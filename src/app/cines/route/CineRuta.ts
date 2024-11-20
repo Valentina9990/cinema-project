@@ -4,14 +4,14 @@ import { Router } from "express";
 class CineRuta{
     public apiRutaCine:Router;
 
-    constructor(){
+    constructor() {
         this.apiRutaCine = Router();
         this.apiRutaCine.get("/", cineControlador.damecines);
-        this.apiRutaCine.post("/", cineControlador.cogeTuSala);
-        this.apiRutaCine.delete("/:idCine", cineControlador.borraTuSala);
-        this.apiRutaCine.put("/", cineControlador.actualizaTuSala);
+        this.apiRutaCine.post("/add", cineControlador.cogeTuCine);
+        this.apiRutaCine.delete("/:idCine", cineControlador.borraTuCine);
+        this.apiRutaCine.put("/:idCine", cineControlador.modificarCine);
         this.apiRutaCine.get("/getPaginados", cineControlador.obtenerCinesPaginados);
-    }
+      }
    
 };
 
