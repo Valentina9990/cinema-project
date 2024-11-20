@@ -1,17 +1,55 @@
 export const Sql_cines = {
-    GET_ALL:"SELECT c.id_cine, c.id_ubicacion, c.nombre_cine, c.telefono_cine \
-     FROM cines c LIMIT $1 OFFSET $2",
+    // Devuelve cines con el nombre de la ubicación en lugar del id
+    GET_ALL: `
+      SELECT 
+        c.id_cine, 
+        u.nombre_ubicacion, 
+        c.nombre_cine, 
+        c.telefono_cine 
+      FROM 
+        cines c
+      INNER JOIN 
+        ubicaciones u 
+      ON 
+        c.id_ubicacion = u.id_ubicacion
+      LIMIT $1 OFFSET $2
+    `,
+  
+    // Inserta un cine, omitiendo id_cine (es autoincremental)
+    ADD: `
+      INSERT INTO cines(id_ubicacion, nombre_cine, telefono_cine) 
+      VALUES ($1, $2, $3) 
+      RETURNING id_cine
+    `,
+  
+    // Consulta si existe un cine con el mismo nombre
+    HOW_MANY: `
+      SELECT COUNT(*) as existe 
+      FROM cines 
+      WHERE nombre_cine = $1
+    `,
+  
+    // Elimina un cine por su ID
+    DELETE: `
+      DELETE FROM cines 
+      WHERE id_cine = $1
+    `,
+  
+    // SQL_CINES.CHECK_ID: Verifica si el cine existe
+CHECK_ID: `
+SELECT COUNT(*) AS existe
+FROM cines
+WHERE id_cine = $1
+`,
 
-     ADD: "INSERT INTO cines(id_cine, id_ubicacion, nombre_cine, telefono_cine) \
-     VALUES ($1, $2, $3, $4) RETURNING id_cine",
+// SQL_CINES.UPDATE: Actualiza la información del cine
+UPDATE: `
+UPDATE cines
+SET nombre_cine = $1, telefono_cine = $2
+WHERE id_cine = $3
+RETURNING id_cine, nombre_cine, telefono_cine;
 
-     HOW_MANY: "SELECT COUNT(id_cine) as existe FROM cines WHERE nombre_cine = $1",
+`,
 
-
-     DELETE: "DELETE FROM cines WHERE id_cine = $1",
-
-     UPDATE_MASIVO: "UPDATE cines SET  id_ubicacion = $1, nombre_cine = $2, telefono_cine = $3 \
-     WHERE id_cine =$9, RETURNING id_cine",
-};
-
-
+  };
+  
