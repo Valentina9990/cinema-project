@@ -18,9 +18,9 @@ class PeliculaDAO {
             });
     }
 
-    protected static async obtenerPorNombre(params: any, res: Response) {
+    protected static async obtenerPorNombre(searchCriteria: any, res: Response) {
         await pool
-            .result(SQL_PELICULAS.HOW_MANY_NAME, params).then((resultado) => {
+            .result(SQL_PELICULAS.SEARCH_BY_NAME, '%' + searchCriteria + '%').then((resultado) => {
                 res.status(200).json(resultado.rows);
             }).catch((miError) => {
                 console.log(miError);

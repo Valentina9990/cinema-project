@@ -28,4 +28,7 @@ export const SQL_PELICULAS = {
 
   GET_BY_ID:
     "SELECT id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail FROM Peliculas WHERE id_pelicula = $1",
+
+  SEARCH_BY_NAME:
+    "SELECT id_pelicula, nombre_pelicula, sinopsis_pelicula, id_genero, duracion_pelicula, idioma, thumbnail FROM Peliculas WHERE nombre_pelicula like $1",
 };

@@ -35,6 +35,7 @@ class PeliculaControlador extends PeliculaDAO {
 
     public borraTuPelicula(req: Request, res: Response): void {
         if (isNaN(Number(req.params.idPelicula))) {
+            console.log(req.params.idPelicula, 'fdlkajlsdkfjl');
             res.status(400).json({ respuesta: "¿Y el codigo?" });
         } else {
             const codigo = Number(req.params.idPelicula);

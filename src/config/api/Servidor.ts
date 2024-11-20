@@ -1,11 +1,12 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import apiRutaCine from "../../app/cines/route/CineRuta";
+import apiRutaComida from "../../app/comida/route/comidaRuta";
 import apiFuncionRuta from "../../app/funciones/route/FuncionRuta";
 import apiPeliculaRuta from "../../app/peliculas/route/PeliculaRuta";
 import apiSalaRuta from "../../app/salas/route/SalaRuta";
 import apiUsuarioRuta from "../../app/usuarios/route/UsuarioRuta";
-import apiRutaCine from "../../app/cines/route/CineRuta";
 
 class Servidor{
     public app: express.Application;
@@ -23,6 +24,7 @@ class Servidor{
         this.app.use("/api/shows", apiFuncionRuta)  
         this.app.use("/api/movies", apiPeliculaRuta)
         this.app.use("/api/cines", apiRutaCine)
+        this.app.use("/api/meal", apiRutaComida)
     }
     
     public cargarConfiguracion():void {
